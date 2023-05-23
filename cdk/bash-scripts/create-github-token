@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="create-github-token"
+printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
+
+
+aws secretsmanager create-secret \
+ --name /github-token \
+ --secret-string $GITHUB_TOKEN

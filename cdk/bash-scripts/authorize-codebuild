@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="authorize-codebuild"
+printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
+
+aws codebuild import-source-credentials \
+ --server-type GITHUB \
+ --auth-type PERSONAL_ACCESS_TOKEN \
+ --token $GITHUB_TOKEN
+ 
+ # verify credentials import worked
+ aws codebuild list-source-credentials 
