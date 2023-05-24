@@ -25,13 +25,13 @@ export class CdkStack extends cdk.Stack {
     const githubRepository = new cdk.CfnParameter(this, "githubRespository", {
         type: "String",
         description: "Github source code repository",
-        default: "amazon-ecs-fargate-cdk-v2-cicd" 
+        default: "deploying-nodejs-app-on-ecs-fargate-using-cdk" 
     })
 
     const githubPersonalTokenSecretName = new cdk.CfnParameter(this, "githubPersonalTokenSecretName", {
         type: "String",
         description: "The name of the AWS Secrets Manager Secret which holds the GitHub Personal Access Token for this project.",
-        default: "/aws-samples/amazon-ecs-fargate-cdk-v2-cicd/github/personal_access_token" 
+        default: "/github-token" 
     })
 
     //default: `${this.stackName}`
@@ -85,8 +85,8 @@ export class CdkStack extends cdk.Stack {
 
     taskDef.addToExecutionRolePolicy(executionRolePolicy);
 
-    const baseImage = 'public.ecr.aws/amazonlinux/amazonlinux:2022'
-    const container = taskDef.addContainer('flask-app', {
+    const baseImage = 'hub.docker.com/_/node:16.20-alpine'
+    const container = taskDef.addContainer('node-app', {
       image: ecs.ContainerImage.fromRegistry(baseImage),
       memoryLimitMiB: 256,
       cpu: 256,
@@ -94,7 +94,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     container.addPortMappings({
-      containerPort: 5000,
+      containerPort: 3000,
       protocol: ecs.Protocol.TCP
     });
 
@@ -159,7 +159,6 @@ export class CdkStack extends cdk.Stack {
           },
           build: {
             commands: [
-              'cd flask-docker-app',
               `docker build -t $ecr_repo_uri:$tag .`,
               '$(aws ecr get-login --no-include-email)',
               'docker push $ecr_repo_uri:$tag'
