@@ -1,5 +1,5 @@
 # Deploying-nodejs-app-on-ecs-fargate-using-cdk
-# Project is in progress
+<img alt="Static Badge" src="https://img.shields.io/badge/Project_status-Ongoing-blue">
 
 This project uses a simple nodejs note app
 
